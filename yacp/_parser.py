@@ -43,12 +43,8 @@ class JsonParser(Parser):
 
         data = ""
         with open(self._file, "r") as f:
-            for line in f.readlines():
-                data += line
-
+            self._data = json.load(f)
             f.close()
-
-        self._data = json.loads(data)
 
         return self._data
 
@@ -56,9 +52,7 @@ class JsonParser(Parser):
         import json
 
         with open(self._file, "w") as f:
-            string = json.dumps(data)
-            f.write(string)
-
+            json.dump(data, f)
             f.close()
 
 
@@ -77,12 +71,8 @@ class YamlParser(Parser):
         data = ""
 
         with open(self._file, "r") as f:
-            for line in f.readlines():
-                data += line
-
+            self._data = yaml.load(f, yaml.FullLoader)
             f.close()
-
-        self._data = yaml.load(data, yaml.FullLoader)
 
         return self._data
 
@@ -90,8 +80,6 @@ class YamlParser(Parser):
         import yaml
 
         with open(self._file, "w") as f:
-            string = yaml.dump(data)
-            f.write(string)
-
+            yaml.dump(data, f)
             f.close()
 
