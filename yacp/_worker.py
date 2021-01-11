@@ -2,7 +2,8 @@ import os
 from ._utils import *
 
 
-def load(filename: str, cls):
+@override
+def load(filename: str, cls, override=False):
 
     # returns the class reference, not the object
     Parser = get_parser_for_file(filename)
@@ -26,7 +27,6 @@ def dump(filename: str, cls):
     parser.serialize(dict_data)
 
     return True
-
 
 
 def populate(data: dict, cls):

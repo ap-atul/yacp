@@ -1,5 +1,5 @@
 """ Parsers for the serialisation and deserialisation"""
-
+__all__ = ["JsonParser", "YamlParser", "CustomParser"]
 
 class Parser:
 
@@ -38,7 +38,7 @@ class JsonParser(Parser):
         self._file = file
         self._syntax = "json"
 
-    def get_dict(self):
+    def deserialize(self):
         import json
 
         data = ""
@@ -48,7 +48,7 @@ class JsonParser(Parser):
 
         return self._data
 
-    def write_dict(self, data):
+    def serialize(self, data):
         import json
 
         with open(self._file, "w") as f:
@@ -65,7 +65,7 @@ class YamlParser(Parser):
         self._file = file
         self._syntax = "yaml"
 
-    def get_dict(self):
+    def deserialize(self):
         import yaml
 
         data = ""
@@ -76,10 +76,13 @@ class YamlParser(Parser):
 
         return self._data
 
-    def write_dict(self, data: dict):
+    def serialize(self, data: dict):
         import yaml
 
         with open(self._file, "w") as f:
-            yaml.dump(data, f)
+            yaml.dump(data, f, default_flow_style=False)
             f.close()
 
+
+class CustomParser(Parser):
+    pass
