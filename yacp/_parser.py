@@ -1,4 +1,7 @@
 """ Parsers for the serialisation and deserialisation"""
+from ._resolver import Resolver
+
+
 __all__ = ["JsonParser", "YamlParser", "CustomParser"]
 
 class Parser:
@@ -95,6 +98,8 @@ class CustomParser(Parser):
         self._syntax = syntax
         self._data = None
 
+        self._resolver = Resolver()
+
     def deserialize(self):
         self._data = dict()
         sep = self._syntax.replace("%s", "")
@@ -105,7 +110,7 @@ class CustomParser(Parser):
 
             for line in lines:
                 key, val = line.replace("\n", "").split(sep)
-                self._data[key] = val
+                self._data[key] = self._resolver.resolve(val)
 
             f.close()
 
