@@ -37,6 +37,7 @@ class JsonParser(Parser):
 
         self._file = file
         self._syntax = "json"
+        self._data = None
 
     def deserialize(self):
         import json
@@ -64,6 +65,7 @@ class YamlParser(Parser):
 
         self._file = file
         self._syntax = "yaml"
+        self._data = None
 
     def deserialize(self):
         import yaml
@@ -85,4 +87,36 @@ class YamlParser(Parser):
 
 
 class CustomParser(Parser):
-    pass
+    def __init__(self, file: str, syntax: str):
+        super().__init__()
+        self.__name__ = "Customparser"
+
+        self._file = file
+        self._syntax = syntax
+        self._data = None
+
+    def deserialize(self):
+        self._data = dict()
+        sep = self._syntax.replace("%s", "")
+        new_line = "\n"
+
+        with open(self._file, "r") as f:
+            lines = f.readlines()
+
+            for line in lines:
+                key, val = line.replace("\n", "").split(sep)
+                self._data[key] = val
+
+            f.close()
+
+        return self._data
+
+    def serialize(self, data: dict):
+        sep = self._syntax.replace("%s", "")
+        new_line = "\n"
+
+        with open(self._file, "w") as f:
+            for key, val in data.items():
+                f.write("%s%s%s\n" % (str(key), sep, str(val)))
+
+        f.close()

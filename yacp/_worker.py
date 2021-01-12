@@ -3,11 +3,15 @@ from ._utils import *
 
 
 @override
-def load(filename: str, cls, override=False):
+def load(filename: str, cls, override=False, syntax=None):
 
     # returns the class reference, not the object
     Parser = get_parser_for_file(filename)
-    parser = Parser(filename)
+
+    if syntax is not None:
+        parser = Parser(filename, syntax)
+    else:
+        parser = Parser(filename)
 
     # get the dictionary data
     dict_data = parser.deserialize()
@@ -16,11 +20,15 @@ def load(filename: str, cls, override=False):
     return populated_object
 
 
-def dump(filename: str, cls):
+def dump(filename: str, cls, syntax=None):
 
     # return the class reference of the parser
     Parser = get_parser_for_file(filename)
-    parser = Parser(filename)
+
+    if syntax is not None:
+        parser = Parser(filename, syntax)
+    else:
+        parser = Parser(filename)
 
     # write the dictionary data
     dict_data = allocate(cls)
